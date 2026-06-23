@@ -58,12 +58,15 @@ export const signup = async (
             }
         );
 
-        console.log("token generated ->", token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
 
         return res.status(201).json({
             success: true,
-            token,
-
             user: {
                 id: user._id,
                 username: user.username,
@@ -127,6 +130,13 @@ export const login = async (
                 expiresIn: "7d",
             }
         );
+        
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
 
         return res.status(200).json({
             success: true,
