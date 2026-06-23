@@ -1,0 +1,319 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f0f4f3;
+  --ink: #0e2a2e;
+  --ink-soft: #2b4a4e;
+  --amber: #f2a93b;
+  --teal: #1b6e6b;
+  --hairline: #c9d6d4;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-amber: var(--amber);
+  --color-teal: var(--teal);
+  --color-hairline: var(--hairline);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.font-body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), "Courier New", monospace;
+}
+
+::selection {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.confluence-pulse {
+  transform-origin: center;
+  animation: pulse-glow 2.6s ease-in-out infinite;
+}
+
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.confluence-path {
+  stroke-dasharray: 4 6;
+  animation: flow-dash 1.6s linear infinite;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes diagram-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.4deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.4deg);
+  }
+}
+
+@keyframes chip-arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-reveal {
+  opacity: 0;
+  animation: reveal-up 650ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-delay-1 {
+  animation-delay: 100ms;
+}
+
+.hero-delay-2 {
+  animation-delay: 200ms;
+}
+
+.hero-delay-3 {
+  animation-delay: 300ms;
+}
+
+.hero-delay-4 {
+  animation-delay: 400ms;
+}
+
+.hero-visual {
+  opacity: 0;
+  animation: reveal-scale 800ms 180ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.diagram-float {
+  animation: diagram-float 6s 1s ease-in-out infinite;
+}
+
+.channel-chip {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chip-arrive 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.profile-card {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.diagram-float:hover .profile-card {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.interactive-button {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    filter 200ms ease,
+    background-color 200ms ease;
+}
+
+.interactive-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.98);
+}
+
+.interactive-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.nav-link {
+  position: relative;
+  padding-block: 0.25rem;
+  transition: color 200ms ease;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 250ms ease;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.lift-card,
+.step-card,
+.platform-chip,
+.auth-card {
+  transition:
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    background-color 300ms ease;
+}
+
+.lift-card:hover,
+.auth-card:hover {
+  border-color: color-mix(in srgb, var(--teal) 45%, var(--hairline));
+  box-shadow: 0 18px 45px -30px color-mix(in srgb, var(--ink) 45%, transparent);
+  transform: translateY(-5px);
+}
+
+.step-card:hover {
+  border-color: var(--amber);
+  transform: translateY(-4px);
+}
+
+.step-number {
+  display: inline-block;
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step-card:hover .step-number {
+  transform: translateX(5px) rotate(3deg);
+}
+
+.platform-chip:hover {
+  border-color: var(--teal);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--teal) 8%, white);
+  transform: translateY(-3px) rotate(-1deg);
+}
+
+.form-input {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.5rem;
+  outline: none;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.form-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 12%, transparent);
+  transform: translateY(-1px);
+}
+
+.form-field-enter {
+  animation: reveal-up 300ms ease-out both;
+}
+
+@supports (animation-timeline: view()) {
+  .reveal-section {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 28%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-reveal,
+  .hero-visual,
+  .channel-chip {
+    opacity: 1;
+  }
+
+  .hero-reveal,
+  .hero-visual,
+  .diagram-float,
+  .channel-chip,
+  .form-field-enter,
+  .confluence-pulse,
+  .confluence-path,
+  .reveal-section {
+    animation: none;
+  }
+
+  .interactive-button,
+  .lift-card,
+  .step-card,
+  .platform-chip,
+  .auth-card,
+  .profile-card,
+  .step-number,
+  .form-input {
+    transition: none;
+  }
+}
