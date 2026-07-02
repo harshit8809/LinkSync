@@ -1,24 +1,35 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
-import type { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import type { Response } from "express";
+import type { AuthRequest } from "../middleware/auth.middleware.js";
+import {
+    clearAuthCookie,
+    setAuthCookie,
+    signAuthToken,
+} from "../utils/cookieOptions.js";
+
+const formatUser = (user: {
+    _id: unknown;
+    username: string;
+    email: string;
+}) => ({
+    id: user._id,
+    username: user.username,
+    email: user.email,
+});
 
 export const signup = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     try {
         const { username, email, password } = req.body;
-
-        // validation
 
         if (!username || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required",
             });
         }
-
-        // existing user
 
         const existingUser = await User.findOne({
             email,
@@ -30,72 +41,46 @@ export const signup = async (
             });
         }
 
-        // hash password
-
         const hashedPassword =
             await bcrypt.hash(password, 10);
-
-        // create user
-
-        console.log(process.env.JWT_SECRET);
 
         const user = await User.create({
             username,
             email,
             password: hashedPassword,
         });
-        console.log("user created ->", user);
 
-        // generate token
-
-        const token = jwt.sign(
-            {
-                userId: user._id,
-            },
-            process.env.JWT_SECRET!,
-            {
-                expiresIn: "7d",
-            }
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        const token = signAuthToken(String(user._id));
+        setAuthCookie(res, token);
 
         return res.status(201).json({
             success: true,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-            },
+            user: formatUser(user),
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message =
+            error instanceof Error
+                ? error.message
+                : "Something went wrong";
+
         return res.status(500).json({
-            message: error.message,
+            message,
         });
     }
 };
 
 export const login = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ) => {
     try {
         const { email, password } = req.body;
-
-        // validation
 
         if (!email || !password) {
             return res.status(400).json({
                 message: "Email and password are required",
             });
         }
-
-        // find user
 
         const user = await User.findOne({ email });
 
@@ -104,8 +89,6 @@ export const login = async (
                 message: "Invalid credentials",
             });
         }
-
-        // compare password
 
         const isPasswordMatched =
             await bcrypt.compare(
@@ -119,39 +102,64 @@ export const login = async (
             });
         }
 
-        // generate token
-
-        const token = jwt.sign(
-            {
-                userId: user._id,
-            },
-            process.env.JWT_SECRET!,
-            {
-                expiresIn: "7d",
-            }
-        );
-        
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        const token = signAuthToken(String(user._id));
+        setAuthCookie(res, token);
 
         return res.status(200).json({
             success: true,
-            token,
-
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-            },
+            user: formatUser(user),
         });
+    } catch (error: unknown) {
+        const message =
+            error instanceof Error
+                ? error.message
+                : "Something went wrong";
 
-    } catch (error: any) {
         return res.status(500).json({
-            message: error.message,
+            message,
+        });
+    }
+};
+
+export const logout = (
+    _req: AuthRequest,
+    res: Response
+) => {
+    clearAuthCookie(res);
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out",
+    });
+};
+
+export const getMe = async (
+    req: AuthRequest,
+    res: Response
+) => {
+    try {
+        const user = await User.findById(req.userId).select(
+            "-password"
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: formatUser(user),
+        });
+    } catch (error: unknown) {
+        const message =
+            error instanceof Error
+                ? error.message
+                : "Something went wrong";
+
+        return res.status(500).json({
+            message,
         });
     }
 };

@@ -3,11 +3,14 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
+import { useDispatch } from "react-redux";
 import { useLoginMutation, useSignupMutation } from "@/src/redux/apis/authApi";
+import { setUser } from "@/src/redux/features/authSlice";
 
 type AuthTab = "signup" | "login";
 
 function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthTab) => void }) {
+  const dispatch = useDispatch();
 
   const [signup, { isLoading }] =
     useSignupMutation();
@@ -28,24 +31,22 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
   }, [tab]);
 
   const onLogin = async (data: LoginFormData) => {
-    console.log("Login:", data);
     try {
       const response = await login({ email: data.email, password: data.password }).unwrap();
-      console.log("login response:", response);
+      dispatch(setUser(response.user));
     } catch (e) {
       console.error("Login error:", e);
     }
   };
 
   const onSignup = async (data: SignupFormData) => {
-    console.log("Signup:", data);
     try {
       const response = await signup({
         username: data.fullName,
         email: data.email,
         password: data.password,
       }).unwrap();
-      console.log("Signup response:", response);
+      dispatch(setUser(response.user));
     } catch (e) {
       console.error("Signup error:", e);
     }
