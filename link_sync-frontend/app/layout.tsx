@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/src/providers/ReduxProvider";
+import AuthProvider from "@/src/providers/AuthProvider";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -38,7 +39,9 @@ export default function RootLayout({
         className={`${fraunces.variable} ${inter.variable} ${spaceMono.variable} font-body antialiased`}
       >
         <ReduxProvider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

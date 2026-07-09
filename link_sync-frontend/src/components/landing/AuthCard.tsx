@@ -6,11 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { useLoginMutation, useSignupMutation } from "@/src/redux/apis/authApi";
 import { setUser } from "@/src/redux/features/authSlice";
+import { useRouter } from "next/navigation";
 
 type AuthTab = "signup" | "login";
 
 function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthTab) => void }) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [signup, { isLoading }] =
     useSignupMutation();
@@ -34,6 +36,7 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
     try {
       const response = await login({ email: data.email, password: data.password }).unwrap();
       dispatch(setUser(response.user));
+      router.push("/dashboard");
     } catch (e) {
       console.error("Login error:", e);
     }
@@ -47,6 +50,7 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
         password: data.password,
       }).unwrap();
       dispatch(setUser(response.user));
+      router.push("/dashboard");
     } catch (e) {
       console.error("Signup error:", e);
     }
