@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 type AuthTab = "signup" | "login";
 
 export function Logomark() {
@@ -48,4 +50,4 @@ function Header({ onAuth }: { onAuth: (tab: AuthTab) => void }) {
     );
 }
 
-export default Header;
+export default memo(Header);

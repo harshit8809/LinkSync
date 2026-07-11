@@ -1,0 +1,67 @@
+.nav-link {
+  position: relative;
+  padding-block: 0.25rem;
+  transition: color 200ms ease;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 250ms ease;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+
+.lift-card,
+.step-card,
+.platform-chip,
+.auth-card {
+  transition:
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    background-color 300ms ease;
+}
+
+.lift-card:hover,
+.auth-card:hover {
+  border-color: color-mix(in srgb, var(--teal) 45%, var(--hairline));
+  box-shadow: 0 18px 45px -30px color-mix(in srgb, var(--ink) 45%, transparent);
+  transform: translateY(-5px);
+}
+
+.step-card:hover {
+  border-color: var(--amber);
+  transform: translateY(-4px);
+}
+
+.step-number {
+  display: inline-block;
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step-card:hover .step-number {
+  transform: translateX(5px) rotate(3deg);
+}
+
+.platform-chip:hover {
+  border-color: var(--teal);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--teal) 8%, white);
+  transform: translateY(-3px) rotate(-1deg);
+}

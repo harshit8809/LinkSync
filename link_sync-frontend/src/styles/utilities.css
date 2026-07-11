@@ -1,0 +1,24 @@
+.form-input {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.5rem;
+  outline: none;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.form-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 12%, transparent);
+  transform: translateY(-1px);
+}
+
+.form-field-enter {
+  animation: reveal-up 300ms ease-out both;
+}
