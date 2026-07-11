@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Header, { Logomark } from "../src/components/landing/Headers";
+import Header from "../src/components/landing/Headers";
 import Hero from "@/src/components/landing/Hero";
 import ProblemSection, { HowItWorks } from "@/src/components/landing/ProblemSection";
 import PlatformsGrid from "@/src/components/landing/PlatformsGrid";
@@ -12,7 +12,6 @@ type AuthTab = "signup" | "login";
 
 export default function Home() {
   const [authTab, setAuthTab] = useState<AuthTab>("signup");
-  // console.log("authTab", authTab);
 
 
   return (

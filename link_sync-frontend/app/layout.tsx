@@ -4,8 +4,9 @@ import "./globals.css";
 import ReduxProvider from "@/src/providers/ReduxProvider";
 import AuthProvider from "@/src/providers/AuthProvider";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -37,13 +38,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={cn("font-sans", geist.variable)}
+      data-scroll-behavior="smooth"
+    >
       <body
         className={`${fraunces.variable} ${inter.variable} ${spaceMono.variable} font-body antialiased`}
       >
         <ReduxProvider>
           <AuthProvider>
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
           </AuthProvider>
         </ReduxProvider>
       </body>
