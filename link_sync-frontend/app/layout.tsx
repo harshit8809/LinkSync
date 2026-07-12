@@ -45,11 +45,11 @@ export default function RootLayout({
         className={`${fraunces.variable} ${inter.variable} ${spaceMono.variable} font-body antialiased`}
       >
         <ReduxProvider>
-          <AuthProvider>
+          {/* <AuthProvider> */}
             <TooltipProvider>
               {children}
             </TooltipProvider>
-          </AuthProvider>
+          {/* </AuthProvider> */}
         </ReduxProvider>
       </body>
     </html>

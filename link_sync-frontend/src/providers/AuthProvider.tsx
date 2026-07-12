@@ -11,9 +11,8 @@ export default function AuthProvider({
     children: React.ReactNode;
 }) {
     const dispatch = useAppDispatch();
-    const isLoggedIn = useAppSelector((s)=>s?.auth?.isAuthenticated)
     const { data, isError, error } = useGetMeQuery(undefined, {
-        skip: !isLoggedIn,
+        // skip: !isLoggedIn,
         refetchOnFocus: true,
         refetchOnReconnect: true,
     });
