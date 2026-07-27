@@ -11,7 +11,12 @@ export default function DashboardLayout({
         <AuthProvider>
             <div className="min-h-screen">
                 <Sidebar />
-                <main className="md:ml-56 p-6 bg-amber-400">
+
+                <div className="md:ml-56">
+                    <CommonHeader />
+                </div>
+
+                <main className="md:ml-56 p-6">
                     {children}
                 </main>
             </div>

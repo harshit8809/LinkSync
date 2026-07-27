@@ -76,8 +76,7 @@ export default function Sidebar() {
     <>
       {/* ── Desktop sidebar ───────────────────────────── */}
       <aside className="hidden md:flex fixed top-0 left-0 h-screen w-56 flex-col z-40">
-        <div
-          className="flex flex-col h-full mx-3 my-3 rounded-2xl border shadow-2xl overflow-hidden backdrop-blur-xl pt-4 bg-linear-to-b from-[#949494] via-[#688c7e] to-[#011610]"       >
+        <div className="flex flex-col h-full mx-3 my-3 rounded-2xl border shadow-2xl overflow-hidden backdrop-blur-xl pt-4 bg-linear-to-b from-[#949494] via-[#688c7e] to-[#011610]">
           {/* Logo */}
           <div className="ml-3 mb-2">
             <AppLogo />

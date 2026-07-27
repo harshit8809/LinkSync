@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation, useSignupMutation } from "@/src/redux/apis/authApi";
 import { setUser } from "@/src/redux/features/authSlice";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type AuthTab = "signup" | "login";
 
@@ -37,8 +38,12 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
       const response = await login({ email: data.email, password: data.password }).unwrap();
       dispatch(setUser(response.user));
       router.push("/dashboard");
-    } catch (e) {
+      // toast("Login successful", { position: "bottom-right", style: { borderWidth: 1, borderColor: "red", padding: 30 }, icon: <X /> })
+      toast.success("Login successful")
+    } catch (e: any) {
       console.error("Login error:", e);
+      // toast(e?.data?.message ?? "Something went wrong!", { position: "bottom-right", style: { borderWidth: 1, borderColor: "#7a0000", color: "#7a0000" }, icon: <X color="#7a0000" size={18}/> })
+      toast.error(e?.data?.message ?? "Something went wrong!")
     }
   };
 
@@ -51,8 +56,10 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
       }).unwrap();
       dispatch(setUser(response.user));
       router.push("/dashboard");
-    } catch (e) {
+      toast.success("Login successful")
+    } catch (e: any) {
       console.error("Signup error:", e);
+      toast.error(e?.data?.message ?? "Something went wrong!")
     }
   };
 
