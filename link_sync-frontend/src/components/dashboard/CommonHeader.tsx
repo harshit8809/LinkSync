@@ -27,9 +27,7 @@ const CommonHeader = () => {
                             HC
                         </AvatarFallback>
                     </Avatar>
-
                 </div>
-
             </div>
         </header>
     )

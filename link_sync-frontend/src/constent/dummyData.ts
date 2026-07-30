@@ -1,3 +1,5 @@
+import { Eye, Link2, MousePointerClick, TrendingUp } from "lucide-react";
+
 export const CHANNELS = [
     { name: "Instagram", color: "#F2A93B", x: 10, y: 90 },
     { name: "Snapchat", color: "#E8704F", x: 130, y: 30 },
@@ -39,3 +41,39 @@ export const PLATFORMS = [
       body: "Drop it in a bio, a resume, a business card, a QR code. People tap once and find everything.",
     },
   ];
+
+
+  export const stats = [
+  {
+    title: "Total Links",
+    value: "12",
+    change: "+2",
+    icon: Link2,
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
+  },
+  {
+    title: "Total Views",
+    value: "1,254",
+    change: "+18%",
+    icon: Eye,
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-600",
+  },
+  {
+    title: "Total Clicks",
+    value: "642",
+    change: "+12%",
+    icon: MousePointerClick,
+    iconBg: "bg-violet-100",
+    iconColor: "text-violet-600",
+  },
+  {
+    title: "Conversion",
+    value: "51.2%",
+    change: "+8%",
+    icon: TrendingUp,
+    iconBg: "bg-yellow-100",
+    iconColor: "text-yellow-600",
+  },
+];

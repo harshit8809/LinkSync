@@ -1,4 +1,5 @@
 import CommonHeader from "@/src/components/dashboard/CommonHeader";
+import PreviewPanel from "@/src/components/dashboard/PreviewPanel";
 import Sidebar from "@/src/components/dashboard/Sidebar";
 import AuthProvider from "@/src/providers/AuthProvider";
 
@@ -16,9 +17,12 @@ export default function DashboardLayout({
                     <CommonHeader />
                 </div>
 
-                <main className="md:ml-56 p-6">
-                    {children}
-                </main>
+                <div className="flex">
+                    <main className="flex-1 md:ml-56">
+                        {children}
+                    </main>
+                    <PreviewPanel />
+                </div>
             </div>
         </AuthProvider>
     );
