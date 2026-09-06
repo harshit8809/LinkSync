@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import { ACCESS_TOKEN_COOKIE } from "../utils/cookieOptions.js";
 
 export interface AuthRequest extends Request {
-    userId?: string;
+    userId?: string | undefined;
 }
 
 export const authenticate = (

@@ -5,11 +5,9 @@ import { Check, Copy, Link, Share } from "lucide-react"
 import { useState } from "react"
 
 const page = () => {
-
   const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = () => {
-    // console.log("jhbcj")
     setIsCopied(true)
   }
 
@@ -53,8 +51,8 @@ const page = () => {
         </div>
       </div>
 
-      <AddedLinks />
 
+      <AddedLinks />
     </main>
   )
 }

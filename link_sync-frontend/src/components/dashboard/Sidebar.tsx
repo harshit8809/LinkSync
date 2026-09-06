@@ -49,8 +49,6 @@ export default function Sidebar() {
   const user = useSelector((state: RootState) => state.auth.user);
   const [userLogout] = useLogoutMutation()
 
-  // console.log("redux user->", user)
-
   const initials = user?.username
     ? user.username.slice(0, 2).toUpperCase()
     : "??";

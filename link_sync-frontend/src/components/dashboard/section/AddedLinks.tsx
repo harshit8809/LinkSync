@@ -5,27 +5,30 @@ import { Plus } from 'lucide-react'
 import LinkedIn from "../../../../public/img/icons/linkedin.png"
 import Github from "../../../../public/img/icons/github.png"
 import Instagram from "../../../../public/img/icons/instagram.png"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LinkCard from '../LinkCard'
+import { useSetPlatformMutation } from '@/src/redux/apis/appApis'
+import { useAppDispatch, useAppSelector } from '@/src/redux/hooks'
+import { setIsSaved } from '@/src/redux/features/linkSlice'
 
 const linksData = [
     {
         id: 1,
-        name: "LinkedIn",
+        platform: "LinkedIn",
         icon: LinkedIn,
         url: "",
         enabled: true,
     },
     {
         id: 2,
-        name: "GitHub",
+        platform: "GitHub",
         icon: Github,
         url: "",
         enabled: true,
     },
     {
         id: 3,
-        name: "Instagram",
+        platform: "Instagram",
         icon: Instagram,
         url: "",
         enabled: true,
@@ -35,6 +38,31 @@ const linksData = [
 const AddedLinks = () => {
 
     const [links, setLinks] = useState(linksData)
+    const [setPlatform,] = useSetPlatformMutation()
+    const user = useAppSelector((state) => state?.auth?.user?.links)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (!user) return;
+
+        setLinks((currentLinks) =>
+            currentLinks.map((localLink) => {
+                const apiLink = user.find(
+                    (item: any) => item.platform === localLink.platform
+                );
+
+                if (!apiLink) {
+                    return localLink;
+                }
+
+                return {
+                    ...localLink,
+                    url: apiLink.url,
+                    enabled: apiLink.enabled,
+                };
+            })
+        );
+    }, [user]);
 
     const handleUrlChange = (id: number, url: string) => {
         setLinks((prev) =>
@@ -52,8 +80,27 @@ const AddedLinks = () => {
         );
     };
 
-    const handleSave = () => {
-        console.log(links);
+    const handleSave = async () => {
+        const formattedLinks = links.map((link, index) => ({
+            platform: link.platform,
+            url: link.url,
+            enabled: link.enabled,
+            order: index,
+        }));
+
+        // console.log("Formatted Links:", formattedLinks);
+
+        try {
+            const resp = await setPlatform({
+                links: formattedLinks,
+            }).unwrap();
+            if (resp.success) {
+                dispatch(setIsSaved(true));
+            }
+            // console.log(resp);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -75,7 +122,7 @@ const AddedLinks = () => {
                 {links.map((link) => (
                     <LinkCard
                         key={link.id}
-                        name={link.name}
+                        platform={link.platform}
                         icon={link.icon}
                         url={link.url}
                         enabled={link.enabled}
@@ -87,7 +134,7 @@ const AddedLinks = () => {
                 ))}
             </div>
 
-            <Button className="mt-4" onClick={handleSave}>
+            <Button className="mt-4 px-14 size-10 rounded-3xl" onClick={handleSave}>
                 Save
             </Button>
         </div>

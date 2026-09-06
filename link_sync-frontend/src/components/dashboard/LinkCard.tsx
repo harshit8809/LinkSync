@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 
 interface LinkCardProps {
-  name: string;
+  platform: string;
   icon: StaticImageData;
   url: string;
   enabled: boolean;
@@ -12,7 +12,7 @@ interface LinkCardProps {
 }
 
 const LinkCard = ({
-  name,
+  platform,
   icon,
   url,
   enabled,
@@ -23,7 +23,7 @@ const LinkCard = ({
     <div className="rounded-xl border-2 p-6 flex items-center gap-4">
       <Image
         src={icon}
-        alt={name}
+        alt={platform}
         width={60}
         height={60}
         className="rounded-full"
@@ -31,7 +31,7 @@ const LinkCard = ({
 
       <div className="flex-1">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-xs font-mono">{name}</p>
+          <p className="text-xs font-mono">{platform}</p>
 
           <Switch
             checked={enabled}
@@ -41,7 +41,7 @@ const LinkCard = ({
 
         <Input
           value={url}
-          placeholder={`Paste your ${name} profile URL...`}
+          placeholder={`Paste your ${platform} profile URL...`}
           onChange={(e) => onUrlChange(e.target.value)}
           className="rounded-2xl border-2 py-6"
         />

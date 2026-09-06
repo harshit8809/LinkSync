@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import Link from "../models/Link.js";
 import type { Response } from "express";
 import type { AuthRequest } from "../middleware/auth.middleware.js";
 import {
@@ -133,24 +134,44 @@ export const logout = (
     });
 };
 
+
 export const getMe = async (
     req: AuthRequest,
     res: Response
 ) => {
     try {
-        const user = await User.findById(req.userId).select(
-            "-password"
-        );
+        const userId = req.userId;
+
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: "Not authenticated",
+            });
+        }
+
+        const [user, links] = await Promise.all([
+            User.findById(userId).select("-password"),
+
+            Link.find({
+                user: userId,
+            }).sort({
+                order: 1,
+            }),
+        ]);
 
         if (!user) {
             return res.status(404).json({
+                success: false,
                 message: "User not found",
             });
         }
 
         return res.status(200).json({
             success: true,
-            user: formatUser(user),
+            user: {
+                ...formatUser(user),
+                links,
+            },
         });
     } catch (error: unknown) {
         const message =
@@ -159,6 +180,7 @@ export const getMe = async (
                 : "Something went wrong";
 
         return res.status(500).json({
+            success: false,
             message,
         });
     }
