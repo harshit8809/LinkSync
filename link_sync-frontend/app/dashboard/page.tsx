@@ -1,60 +1,85 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import AddedLinks from "@/src/components/dashboard/section/AddedLinks"
-import { Check, Copy, Link, Share } from "lucide-react"
-import { useState } from "react"
+"use client";
 
-const page = () => {
-  const [isCopied, setIsCopied] = useState(false)
+import { Button } from "@/components/ui/button";
+import AddedLinks from "@/src/components/dashboard/section/AddedLinks";
+import { useAppSelector } from "@/src/redux/hooks";
+import { Check, Copy, Link2, Share2, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
-  const handleCopy = () => {
-    setIsCopied(true)
-  }
+const DashboardPage = () => {
+  const [isCopied, setIsCopied] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
+  const username = user?.username ?? "Harshit";
+  const profilePath = `/linksync/${username.toLowerCase().replaceAll(" ", ".")}`;
+
+  useEffect(() => {
+    if (!isCopied) return;
+    const timeout = window.setTimeout(() => setIsCopied(false), 2200);
+    return () => window.clearTimeout(timeout);
+  }, [isCopied]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${profilePath}`);
+      setIsCopied(true);
+    } catch {
+      setIsCopied(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({ title: `${username}'s LinkSync`, url: `${window.location.origin}${profilePath}` });
+      return;
+    }
+    await handleCopy();
+  };
 
   return (
-    <main className="shadow-xl p-4 rounded-2xl bg-white md:mx-4">
-      <div className=" flex justify-between items-center mb-4">
-        <div>
-          <h1 className="font-display text-3xl ">Hi, Harshit 👋</h1>
-        </div>
-      </div>
-
-      <div className="rounded-xl border-2 mt-4 p-4">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-row items-center gap-4">
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full`}
-              style={{ backgroundColor: 'rgba(28, 81, 54, 0.3)' }}
-            >
-              <Link className={`h-5 w-5`} color="#194d33" />
+    <main className="min-h-full p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <div className="mb-2 flex items-center gap-2 text-xs font-medium tracking-[0.16em] text-teal uppercase">
+              <Sparkles className="size-3.5" /> Your LinkSync space
             </div>
-
-            <div>
-              <p className="text-xs font-mono">
-                Your Link
-              </p>
-              <p>
-                linksync/harshit.kumar
-              </p>
-            </div>
+            <h1 className="font-display text-3xl text-ink sm:text-4xl">Hi, {username} 👋</h1>
+            <p className="mt-2 text-sm text-ink-soft">Shape the links people see when they visit your profile.</p>
           </div>
-
-          <div className="">
-            <Button variant={"outline"} onClick={handleCopy}>
-              {isCopied ? <Check /> : <Copy />}  <p className="text-xs font-mono">{isCopied ? "Copied" : "Copy"}</p>
-            </Button>
-
-            <Button variant={"outline"} className='ml-4'>
-              <Share /> <p className="text-xs font-mono">Share</p>
-            </Button>
+          <div className="hidden rounded-full border border-teal/15 bg-teal/8 px-3 py-1.5 text-xs font-medium text-teal sm:block">
+            Profile editor
           </div>
         </div>
+
+        <section className="overflow-hidden rounded-2xl border border-hairline/80 bg-white shadow-[0_12px_40px_-24px_rgba(14,42,46,0.35)]">
+          <div className="flex flex-col gap-5 p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex min-w-0 items-center gap-4">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#e1ebe5]">
+                <Link2 className="size-5 text-[#194d33]" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-mono text-[11px] tracking-wide text-ink-soft uppercase">Your public link</p>
+                <p className="mt-1 truncate text-base font-semibold text-ink sm:text-lg">{profilePath}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 sm:flex">
+              <Button variant="outline" onClick={handleCopy} className="h-10 rounded-xl border-hairline bg-white px-4 hover:border-teal/35 hover:bg-teal/5">
+                {isCopied ? <Check className="size-4 text-teal" /> : <Copy className="size-4" />}
+                <span>{isCopied ? "Copied" : "Copy link"}</span>
+              </Button>
+              <Button variant="outline" onClick={handleShare} className="h-10 rounded-xl border-hairline bg-white px-4 hover:border-teal/35 hover:bg-teal/5">
+                <Share2 className="size-4" />
+                <span>Share</span>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <AddedLinks />
       </div>
-
-
-      <AddedLinks />
     </main>
-  )
-}
+  );
+};
 
-export default page
+export default DashboardPage;
