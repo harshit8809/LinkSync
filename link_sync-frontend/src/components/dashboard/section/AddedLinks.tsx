@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Plus } from 'lucide-react'
+import { Plus, Save } from 'lucide-react'
 import LinkedIn from "../../../../public/img/icons/linkedin.png"
 import Github from "../../../../public/img/icons/github.png"
 import Instagram from "../../../../public/img/icons/instagram.png"
@@ -35,20 +35,28 @@ const linksData = [
     },
 ]
 
+type SavedLink = {
+    platform: string;
+    url: string;
+    enabled: boolean;
+};
+
 const AddedLinks = () => {
 
     const [links, setLinks] = useState(linksData)
-    const [setPlatform,] = useSetPlatformMutation()
+    const [setPlatform, { isLoading: isSaving }] = useSetPlatformMutation()
     const user = useAppSelector((state) => state?.auth?.user?.links)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (!user) return;
 
+        // The authenticated profile arrives after hydration, so initialize the editable draft once it is available.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLinks((currentLinks) =>
             currentLinks.map((localLink) => {
                 const apiLink = user.find(
-                    (item: any) => item.platform === localLink.platform
+                    (item: SavedLink) => item.platform === localLink.platform
                 );
 
                 if (!apiLink) {
@@ -104,21 +112,21 @@ const AddedLinks = () => {
     };
 
     return (
-        <div className="rounded-xl border-2 mt-4 p-4">
-            <div className="flex items-center justify-between mb-5">
+        <section className="mt-5 overflow-hidden rounded-2xl border border-hairline/80 bg-white shadow-[0_12px_40px_-24px_rgba(14,42,46,0.35)]">
+            <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
                 <div>
-                    <p className="font-bold">Your links</p>
-                    <p className="font-mono text-xs">Add and edit your profile links anytime</p>
+                    <p className="text-lg font-semibold text-ink">Your links</p>
+                    <p className="mt-1 text-sm text-ink-soft">Add and edit your profile links anytime.</p>
                 </div>
 
-                <Button className="md:px-6 md:py-5 rounded-4xl">
-                    <Plus /> <p className="md:text-s text-xs font-mono">Add New Link</p>
+                <Button variant="outline" className="h-10 self-start rounded-xl border-dashed border-teal/40 px-4 text-teal hover:bg-teal/5 sm:self-auto">
+                    <Plus className="size-4" /> <span>Add new link</span>
                 </Button>
             </div>
 
-            <Separator />
+            <Separator className="bg-hairline/70" />
 
-            <div className="mt-4 space-y-4">
+            <div className="space-y-3 p-4 sm:p-6">
                 {links.map((link) => (
                     <LinkCard
                         key={link.id}
@@ -132,12 +140,15 @@ const AddedLinks = () => {
                         }
                     />
                 ))}
+                <div className="mt-5 flex items-center justify-between gap-4 border-t border-hairline/70 pt-5">
+                    <p className="hidden text-xs text-ink-soft sm:block">Changes will appear in your live preview after saving.</p>
+                    <Button className="ml-auto h-10 rounded-xl bg-[#194d33] px-5 text-white hover:bg-[#123b27]" onClick={handleSave} disabled={isSaving}>
+                        <Save className="size-4" />
+                        {isSaving ? "Saving..." : "Save changes"}
+                    </Button>
+                </div>
             </div>
-
-            <Button className="mt-4 px-14 size-10 rounded-3xl" onClick={handleSave}>
-                Save
-            </Button>
-        </div>
+        </section>
     )
 }
 
