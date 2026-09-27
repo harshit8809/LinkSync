@@ -47,6 +47,7 @@ const allowedOrigins = [
     "http://localhost:3000",
     "https://linksync.vercel.app",
     "https://staging.linksync.com",
+    "https://linksync-backend-t4mj.onrender.com"
 ];
 
 app.use(
