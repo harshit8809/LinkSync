@@ -11,23 +11,34 @@ export default function AuthProvider({
     children: React.ReactNode;
 }) {
     const dispatch = useAppDispatch();
-    const { data, isError, error } = useGetMeQuery(undefined, {
+    const { data, isError, error, isLoading } = useGetMeQuery(undefined, {
         // skip: !isLoggedIn,
         refetchOnFocus: true,
         refetchOnReconnect: true,
     });
 
+    // useEffect(() => {
+    //     if (data?.user) {
+    //         dispatch(setUser(data.user));
+    //     }
+    // }, [data, dispatch]);
+
+    // useEffect(() => {
+    //     if (isError) {
+    //         dispatch(logout());
+    //     }
+    // }, [isError, dispatch]);
+
     useEffect(() => {
         if (data?.user) {
             dispatch(setUser(data.user));
         }
-    }, [data, dispatch]);
 
-    useEffect(() => {
         if (isError) {
             dispatch(logout());
+            console.error("GET ME ERROR:", error);
         }
-    }, [isError, dispatch]);
+    }, [data, isError]);
 
     return children;
 }

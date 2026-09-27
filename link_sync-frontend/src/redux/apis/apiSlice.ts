@@ -5,7 +5,7 @@ export const apiSlice = createApi({
 
     baseQuery: fetchBaseQuery({
         // baseUrl: 'http://localhost:3003',
-        baseUrl: 'https://linksync-backend-t4mj.onrender.com',
+        baseUrl: process.env.NEXT_PUBLIC_API_URL,
         credentials: "include",
     }),
 

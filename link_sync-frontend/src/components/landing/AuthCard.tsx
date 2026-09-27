@@ -19,6 +19,7 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
     useSignupMutation();
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
 
+  const isSubmitting = isLoading || isLoginLoading;
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -195,7 +196,8 @@ function AuthCard({ tab, onTabChange }: { tab: AuthTab; onTabChange: (tab: AuthT
                   type="submit"
                   className="w-full rounded-full bg-amber py-3 font-semibold text-ink transition hover:brightness-95"
                 >
-                  {tab === "signup" ? "Create my page" : "Log in"}
+                  {/* {tab === "signup" ? "Create my page" : "Log in"} */}
+                  {isSubmitting ? (tab === "signup" ? "Creating my page..." : "Logging in...") : tab === "signup" ? "Create my page" : "Log in"}
                 </button>
               </form>
 
